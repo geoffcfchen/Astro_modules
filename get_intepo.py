@@ -3,7 +3,7 @@ from scipy.interpolate import RegularGridInterpolator
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
-#matplotlib.interactive(True)
+matplotlib.interactive(True)
 
 
 ##oned_intepo is to intepolate 1d-histgram of a given array to a continous function. that is if one input 1-d array this function output the continuous function of the histgram of that 1-d array. It also return the edge of the prior.
@@ -13,8 +13,8 @@ def one_dim_intepo(x,x_bin='auto'):
     x_counts=np.append(x_counts,0)
     x_dfference=x_bins[1]-x_bins[0]
     x_bins=x_bins+x_dfference/2.
-    #plt.plot(x_bins,x_counts,'-')
-    #plt.show()
+    plt.plot(x_bins,x_counts,'-')
+    plt.show()
     boundary_diff=0.0001*(x_bins[-1]-x_bins[0])
     print("the boundary diff is ", boundary_diff)
     print('the boundary of the paramter are',x_bins[0],x_bins[-1])
@@ -27,10 +27,10 @@ def one_dim_intepo(x,x_bin='auto'):
 #       (a,b,c),
 #       (a,b,c))
 #It also return the boundary (min,max) of parameter0,parameter1,parameter2
-def three_dim_intepo(x,a=30,b=30,c=30):
+def three_dim_intepo(x,a=30,b=30,c=30,weights=None):
     print("The dimension of the input array is",x.shape[1])
     print("The number of the data point in the input array is",x.shape[0])
-    H, edges = np.histogramdd(x, bins = (a, b, c))
+    H, edges = np.histogramdd(x, bins = (a, b, c),weights=weights)
     H=H/np.sum(H)
     tmp=np.zeros((1,b,c))
     H0=np.concatenate((H,tmp),axis=0)
@@ -55,4 +55,4 @@ def three_dim_intepo(x,a=30,b=30,c=30):
     print('the true return boundary of paramter0 is',edges[0][0]+boundary0_diff,edges[0][-1]-boundary0_diff)
     print('the true return boundary of paramter1 is',edges[1][0]+boundary1_diff,edges[1][-1]-boundary1_diff)
     print('the true return boundary of paramter2 is',edges[2][0]+boundary2_diff,edges[2][-1]-boundary2_diff)
-    return RegularGridInterpolator((edges[0],edges[1],edges[2]), H2),edges[0][0]+boundary0_diff,edges[0][-1]-boundary0_diff,edges[1][0]+boundary1_diff,edges[1][-1]-boundary1_diff,edges[2][0]+boundary2_diff,edges[2][-1]-boundary2_diff
+    return RegularGridInterpolator((edges[0],edges[1],edges[2]), H2),edges[0][0]+boundary0_diff,edges[0][-1]-boundary0_diff,edges[1][0]+boundary1_diff,edges[1][-1]-boundary1_diff,edges[2][0]+boundary2_diff,edges[2][-1]-boundary2_diff,
